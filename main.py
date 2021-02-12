@@ -27,16 +27,37 @@ def process_one(fname, symdict, imgiddict, labelcols):
                         symdict[label].append(symfname)
 
 
+def make_pcs_map(sdict, idict):
+    process_one("Addenda Core-2004.xlsx", sdict, idict, [4, 15])
+    process_one("2006 2008 2012 Addenda with Translations.xlsx", sdict, idict, [4, 15])
+    process_one("PCS Classic Safeguard w Translations.xlsx", sdict, idict, [3, 4])
+    process_one("PCS Supplemental 1.xlsx", sdict, idict, [3, 4])
+    process_one("PCS Supplemental 2.xlsx", sdict, idict, [3, 4])
+    process_one("ThinLine Translations.xlsx", sdict, idict, [3, 14])
+
+
+def make_high_contrast_map(sdict, idict):
+    process_one("PCS High Contrast with Translations.xlsx", sdict, idict, [3, 15])
+
+
+def fix_symbol_map(fname, oname):
+    with open(fname, 'rb') as fp:
+        sdict = pickle.load(fp)
+
+    newdict = {key: [value] for (key, value) in sdict.items()}
+
+    with open(oname, 'wb') as fp:
+        pickle.dump(newdict, fp)
+
+
 symdict = dict()
 imgiddict = dict()
-process_one("Addenda Core-2004.xlsx", symdict, imgiddict, [4, 15])
-process_one("2006 2008 2012 Addenda with Translations.xlsx", symdict, imgiddict, [4, 15])
-process_one("PCS Classic Safeguard w Translations.xlsx", symdict, imgiddict, [3, 4])
-process_one("PCS Supplemental 1.xlsx", symdict, imgiddict, [3, 4])
-process_one("PCS Supplemental 2.xlsx", symdict, imgiddict, [3, 4])
-process_one("ThinLine Translations.xlsx", symdict, imgiddict, [3, 14])
-# process_one("PCS High Contrast with Translations.xlsx", symdict, imgiddict, [3, 15])
-with open("symbol.map", 'wb') as f:
-    pickle.dump(symdict, f)
-with open("img-id.map", 'wb') as f:
-    pickle.dump(imgiddict, f)
+fix_symbol_map("c:\\PycharmProjects\\Playpen\\symbols\\PRC\\symbol-old.map", "c:\\PycharmProjects\\Playpen\\symbols\\PRC\\symbol.map")
+fix_symbol_map("c:\\PycharmProjects\\Playpen\\symbols\\ARASAAC BW\\symbol-old.map", "c:\\PycharmProjects\\Playpen\\symbols\\ARASAAC BW\\symbol.map")
+fix_symbol_map("c:\\PycharmProjects\\Playpen\\symbols\\ARASAAC Color\\symbol-old.map", "c:\\PycharmProjects\\Playpen\\symbols\\ARASAAC Color\\symbol.map")
+# make_pcs_map(symdict, imgiddict)
+# make_high_contrast_map(symdict, imgiddict)
+# with open("symbol.map", 'wb') as f:
+#     pickle.dump(symdict, f)
+# with open("img-id.map", 'wb') as f:
+#     pickle.dump(imgiddict, f)
